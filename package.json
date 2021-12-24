@@ -8,6 +8,10 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.6",
+    "@apollo/graphql": "^14.5.0",
+    "antd": "^4.17.4",
+    "graphql": "^16.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
