@@ -16,7 +16,7 @@ const BasicLayout: React.FC = props => {
   return (
     <ApolloProvider client={client}>
       <div>
-        <h1 className={styles.title}>Welcome to SpaceX Launch Searcher!</h1>
+        <h1 className={styles.title}>SpaceX Launch Explorer</h1>
         {props.children}
       </div>
     </ApolloProvider>

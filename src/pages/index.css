@@ -1,22 +1,31 @@
 
 .searchCard {
   margin-left:10px;
-  max-width: 300px;
   border: 1px solid silver;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   text-align: left;
   padding: 8px;
 }
-.resultCard{
 
+.resultCard{
+  border: 1px solid silver;
+  background-color: grey;
+  margin-bottom: 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.resultCard p {
+    margin : 2px;
+    color: white;
+}
+.resultCardButton {
+  float: right;
 }
 .searchInput{
-  margin-left:30px;
   padding-top: 10px;
   /* color: #1890ff; */
 }
 .numberInput{
-  width:40px;
-  margin-left:10px;
+  max-width: 60%;
 }

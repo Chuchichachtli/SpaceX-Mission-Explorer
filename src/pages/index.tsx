@@ -14,7 +14,7 @@ const GET_MISSIONS = gql`
       launch_site {
         site_name_long
       }
-      launch_date_local
+      launch_date_utc
       launch_success
       id
     }
@@ -38,13 +38,9 @@ export default function () {
   });
   if (data) { setSkipRefetch(true); }
 
-  // if (loading) return null;
-  // if (error) return `Error! ${error}`;
-
   const onSearch = () => {
     setSkipRefetch(false);
     refetch();
-
   }
   const onTextChange = (e: React.FormEvent<HTMLInputElement>) => {
     setMissionName(e.currentTarget.value);
@@ -63,49 +59,50 @@ export default function () {
       setResultCount(0)
     }
   }
-  const renderResults = () => {
-    if (true) {
-      return <></>
-    } else {
-      return <Card className={styles.resultCard} title="Results">123 </Card>
-    }
+
+  const renderSearch = () => {
+    return (<Card bordered={true}
+      className={styles.searchCard}
+      title={<span style={{ position: "relative", marginLeft: "20px", fontSize: "20px" }}>Search</span>} >
+      <form onSubmit={onSearch}>
+        <Search className={styles.searchInput}
+          enterButton
+          onSearch={onSearch}
+          placeholder='Mission Name'
+          value={missionName}
+          onChange={onTextChange}
+        />
+        <p style={{marginTop:"10px"}}>
+        <Input addonBefore="Limit" className={styles.numberInput} defaultValue={defaultResultCount} value={resultCount}
+          onChange={onCountChange}></Input>
+        <Button type='primary' style={{float:'right'}} onClick={onSearch} >Search</Button>
+        </p>
+      </form>
+    </Card>)
   }
 
+  const renderResults = () => {
+    return (showResults() ?
+      (<Card size="small" title="Results">
+        <Row>
+          {results.launchesPast.map((launchData: IMission) => {
+            return <LaunchCard launchData={launchData} />
+          })}
+        </Row>
+      </Card>)
+      :
+      <>Loading...</>
+    );
+  }
 
   return (
     <div style={{ width: "100%" }} className={styles.normal}>
-      <Row align='top'>
-        <Col span={6} pull={20}>
-          <Card bordered={true}
-            className={styles.searchCard}
-            title={<span style={{ position: "relative", marginLeft: "20px", fontSize: "20px" }}>Search</span>} >
-            <br />
-            <form onSubmit={onSearch}>
-              <Search className={styles.searchInput}
-                enterButton
-                onSearch={onSearch}
-                placeholder='Mission Name'
-                value={missionName}
-                onChange={onTextChange}
-              />
-              <Input className={styles.numberInput} defaultValue={defaultResultCount} value={resultCount}
-                onChange={onCountChange}></Input>
-              <Button type='primary' >Search</Button>
-            </form>
-          </Card>
+      <Row gutter={8} align='top'>
+        <Col span={6}>
+          {renderSearch()}
         </Col>
-        <Col span={18} >
-
-          {showResults() ?
-            <Row>
-              {results.launchesPast.map((launchData: IMission) => {
-                return <LaunchCard launchData={launchData} />
-              })}
-              {/* {results.launchesPast[0] ? <LaunchCard launchData={results.launchesPast[0]} /> : <p>! No !</p>} */}
-            </Row>
-            :
-            <>Loading...</>
-          }
+        <Col span={16} >
+          {renderResults()}
         </Col>
 
       </Row>
@@ -113,13 +110,10 @@ export default function () {
   )
 }
 
-type IResponse = {
-  launchesPast: IMission[]
-}
 interface IMission {
   id: string;
   mission_name: string;
-  launch_date_local: string;
+  launch_date_utc: string;
   launch_success: boolean;
   launch_site: ILaunchSite;
 }
@@ -130,34 +124,17 @@ type LaunchCardProps = {
   launchData: IMission
 }
 const LaunchCard: React.FC<LaunchCardProps> = ({ launchData }) => {
-  const { id, mission_name, launch_date_local, launch_success, launch_site } = launchData;
+  const { id, mission_name, launch_date_utc, launch_success, launch_site } = launchData;
+  const date = new Date(launch_date_utc);
+  date.toString()
   return (
-    <Col span={8} style={{ width: 300 }}>
-      <Card bordered={true} style={{border: "1px solid silver"}} title={mission_name}>
-        <p> {launch_date_local} </p>
-        <p> {launch_success ? <span style={{color:"green"}}>Successful</span> : <span style={{color:"red"}}>Failed</span>} </p>
+    <Col span={12} style={{ width: 300 }}>
+      <Card size='small' bordered={true} className={styles.resultCard} title={mission_name}>
+        <p> {date.toString()} </p>
+        <p> {launch_success ? <span style={{ color: "green" }}>Successful</span> : <span style={{ color: "red" }}>Failed</span>} </p>
         <p> {launch_site.site_name_long} </p>
-
+        <Button>More</Button>
       </Card>
     </Col>);
 
 }
-// const ResultCard : FC<ResultCardProps> = (props : ResultCardProps) : JSX.Element => {
-
-//     const limit = props.limit ? props.limit : 0;
-//     const mission_name = props.missionName ? props.missionName : "";
-//     const [getMission, {loading, error, data}] = useLazyQuery(GET_MISSIONS, {
-//       variables: { limit, mission_name },
-//     });
-
-//     if (loading) return <></>;
-//     if (error) return <p>{error}</p>;
-//     console.log(data);
-//     if (!data){
-//       return <button onClick={() => { getMission() }}></button>
-//     }else{
-//       return <p>{data}</p>
-//     }
-
-
-// }
