@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './index.css';
 import 'antd/dist/antd.css';
+import { Link } from 'react-router-dom';
 import {
   ApolloClient,
   InMemoryCache,
@@ -16,7 +17,9 @@ const BasicLayout: React.FC = props => {
   return (
     <ApolloProvider client={client}>
       <div>
-        <h1 className={styles.title}>SpaceX Launch Explorer</h1>
+        <Link to="/">
+          <h1 className={styles.title}>SpaceX Launch Explorer</h1>
+        </Link>
         {props.children}
       </div>
     </ApolloProvider>

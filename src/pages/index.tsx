@@ -6,6 +6,7 @@ import {
   useQuery,
   gql
 } from "@apollo/client";
+import { Link } from 'react-router-dom';
 
 const GET_MISSIONS = gql`
   query GetMissions ($limit : Int, $mission_name : String) {
@@ -61,9 +62,10 @@ export default function () {
   }
 
   const renderSearch = () => {
-    return (<Card bordered={true}
+    return (
+    <Card size="small" bordered={true}
       className={styles.searchCard}
-      title={<span style={{ position: "relative", marginLeft: "20px", fontSize: "20px" }}>Search</span>} >
+      title={<span className={styles.header}>Search</span>} >
       <form onSubmit={onSearch}>
         <Search className={styles.searchInput}
           enterButton
@@ -75,7 +77,7 @@ export default function () {
         <p style={{marginTop:"10px"}}>
         <Input addonBefore="Limit" className={styles.numberInput} defaultValue={defaultResultCount} value={resultCount}
           onChange={onCountChange}></Input>
-        <Button type='primary' style={{float:'right'}} onClick={onSearch} >Search</Button>
+        {/* <Button type='primary' className={styles.floatRight} onClick={onSearch} >Search</Button> */}
         </p>
       </form>
     </Card>)
@@ -83,15 +85,16 @@ export default function () {
 
   const renderResults = () => {
     return (showResults() ?
-      (<Card size="small" title="Results">
+      (<Card size="small" title={<span className={styles.header}>Results</span>} >
         <Row>
           {results.launchesPast.map((launchData: IMission) => {
             return <LaunchCard launchData={launchData} />
           })}
         </Row>
       </Card>)
-      :
-      <>Loading...</>
+      : <>
+      {loading ? <span> </span> : <span> </span> }
+      </>
     );
   }
 
@@ -133,8 +136,7 @@ const LaunchCard: React.FC<LaunchCardProps> = ({ launchData }) => {
         <p> {date.toString()} </p>
         <p> {launch_success ? <span style={{ color: "green" }}>Successful</span> : <span style={{ color: "red" }}>Failed</span>} </p>
         <p> {launch_site.site_name_long} </p>
-        <Button>More</Button>
+        <Link to={"/launch/"+id}><Button className={styles.floatRight}>More</Button></Link>
       </Card>
     </Col>);
-
 }
