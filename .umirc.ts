@@ -8,7 +8,8 @@ const config: IConfig =  {
       path: '/',
       component: '../layouts/index',
       routes: [
-        { path: '/', component: '../pages/index' }
+        { path: '/', component: '../pages/index' },
+        { path: '/test', component: '../pages/test/test'}
       ]
     }
   ],
@@ -20,7 +21,7 @@ const config: IConfig =  {
       dynamicImport: false,
       title: 'spacex-launches-simple-empty',
       dll: false,
-      
+
       routes: {
         exclude: [
           /components\//,
