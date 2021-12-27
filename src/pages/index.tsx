@@ -1,6 +1,6 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './index.css';
-import { Input, Card, Row, Col } from 'antd';
+import { Input, Card, Row, Col, Button } from 'antd';
 const { Search } = Input;
 import {
   useQuery,
@@ -27,12 +27,12 @@ export default function () {
   const [resultCount, setResultCount] = useState(defaultResultCount);
   const [missionName, setMissionName] = useState("");
   const [skipRefetch, setSkipRefetch] = useState(false);
-  const [results, setResults] = useState({launchesPast : []});
+  const [results, setResults] = useState({ launchesPast: [] });
 
-  const showResults = () => {  return results.launchesPast.length !== 0 ; }
+  const showResults = () => { return results.launchesPast.length !== 0; }
 
   const { loading, error, data, refetch } = useQuery(GET_MISSIONS, {
-    variables: {limit:resultCount , mission_name:missionName },
+    variables: { limit: resultCount, mission_name: missionName },
     skip: skipRefetch,
     onCompleted: setResults
   });
@@ -43,7 +43,7 @@ export default function () {
 
   const onSearch = () => {
     setSkipRefetch(false);
-    refetch() ;
+    refetch();
 
   }
   const onTextChange = (e: React.FormEvent<HTMLInputElement>) => {
@@ -74,8 +74,8 @@ export default function () {
 
   return (
     <div style={{ width: "100%" }} className={styles.normal}>
-      <Row gutter={8} align='top'>
-        <Col span={4} pull={20}>
+      <Row align='top'>
+        <Col span={6} pull={20}>
           <Card bordered={true}
             className={styles.searchCard}
             title={<span style={{ position: "relative", marginLeft: "20px", fontSize: "20px" }}>Search</span>} >
@@ -90,30 +90,22 @@ export default function () {
               />
               <Input className={styles.numberInput} defaultValue={defaultResultCount} value={resultCount}
                 onChange={onCountChange}></Input>
+              <Button type='primary' >Search</Button>
             </form>
           </Card>
-          sadsad
         </Col>
-
-
-        <Col span={16} >
+        <Col span={18} >
 
           {showResults() ?
-            <p>{results.launchesPast.toString()}
-            <p>{results.launchesPast[0] ? <LaunchCard launchData={results.launchesPast[0]}/> : <p>! No !</p>}</p>
-            </p>
+            <Row>
+              {results.launchesPast.map((launchData: IMission) => {
+                return <LaunchCard launchData={launchData} />
+              })}
+              {/* {results.launchesPast[0] ? <LaunchCard launchData={results.launchesPast[0]} /> : <p>! No !</p>} */}
+            </Row>
             :
-            <>Eror?</>
-
-
+            <>Loading...</>
           }
-          {/* <ResultCard
-            limit={resultCount}
-            missionName={missionName}
-          /> */}
-          {/* {renderResults()} */}
-          {/* {showResults ? ResultCard({limit: 0+resultCount, missionName: String(missionName) }) : <></> } */}
-
         </Col>
 
       </Row>
@@ -122,29 +114,32 @@ export default function () {
 }
 
 type IResponse = {
-  launchesPast : IMission[]
+  launchesPast: IMission[]
 }
 interface IMission {
   id: string;
   mission_name: string;
   launch_date_local: string;
   launch_success: boolean;
-  launch_site : ILaunchSite;
+  launch_site: ILaunchSite;
 }
 interface ILaunchSite {
-  site_name_long : string;
+  site_name_long: string;
 }
-type LaunchCardProps  = {
-  launchData : IMission
+type LaunchCardProps = {
+  launchData: IMission
 }
-const LaunchCard : React.FC<LaunchCardProps> = ({launchData }) =>{
-  const {id, mission_name, launch_date_local, launch_success, launch_site} = launchData ;
-  return (<Card title={mission_name}>
-      <span> {launch_date_local} </span>
-      <span> {launch_success} </span>
-      <span> {launch_site.site_name_long} </span>
+const LaunchCard: React.FC<LaunchCardProps> = ({ launchData }) => {
+  const { id, mission_name, launch_date_local, launch_success, launch_site } = launchData;
+  return (
+    <Col span={8} style={{ width: 300 }}>
+      <Card bordered={true} style={{border: "1px solid silver"}} title={mission_name}>
+        <p> {launch_date_local} </p>
+        <p> {launch_success ? <span style={{color:"green"}}>Successful</span> : <span style={{color:"red"}}>Failed</span>} </p>
+        <p> {launch_site.site_name_long} </p>
 
-    </Card>);
+      </Card>
+    </Col>);
 
 }
 // const ResultCard : FC<ResultCardProps> = (props : ResultCardProps) : JSX.Element => {
