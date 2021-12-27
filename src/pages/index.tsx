@@ -13,13 +13,8 @@ const GET_MISSIONS = gql`
       mission_name
       launch_site {
         site_name_long
-        site_name
-      }
-      links {
-        article_link
       }
       launch_date_local
-      launch_date_unix
       launch_success
       id
     }
@@ -104,9 +99,13 @@ export default function () {
         <Col span={16} >
 
           {showResults() ?
-            <p>{results.launchesPast.toString()}</p>
+            <p>{results.launchesPast.toString()}
+            <p>{results.launchesPast[0] ? <LaunchCard launchData={results.launchesPast[0]}/> : <p>! No !</p>}</p>
+            </p>
             :
             <>Eror?</>
+
+
           }
           {/* <ResultCard
             limit={resultCount}
@@ -122,14 +121,32 @@ export default function () {
   )
 }
 
-interface ResultCardProps {
-  limit: number,
-  missionName: string
+type IResponse = {
+  launchesPast : IMission[]
 }
-type Result = {
+interface IMission {
+  id: string;
+  mission_name: string;
+  launch_date_local: string;
+  launch_success: boolean;
+  launch_site : ILaunchSite;
+}
+interface ILaunchSite {
+  site_name_long : string;
+}
+type LaunchCardProps  = {
+  launchData : IMission
+}
+const LaunchCard : React.FC<LaunchCardProps> = ({launchData }) =>{
+  const {id, mission_name, launch_date_local, launch_success, launch_site} = launchData ;
+  return (<Card title={mission_name}>
+      <span> {launch_date_local} </span>
+      <span> {launch_success} </span>
+      <span> {launch_site.site_name_long} </span>
+
+    </Card>);
 
 }
-
 // const ResultCard : FC<ResultCardProps> = (props : ResultCardProps) : JSX.Element => {
 
 //     const limit = props.limit ? props.limit : 0;
