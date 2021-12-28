@@ -1,6 +1,6 @@
 
 .normal {
-  font-family: Georgia, sans-serif;
+  font-family: sans-serif;
   text-align: center;
 }
 
@@ -8,10 +8,13 @@
   font-size: 2rem;
   font-weight: normal;
   letter-spacing: -1px;
-  background: darkslateblue;
+  background: #1A374D;
   padding: .2em .6em;
   color: white;
   margin: 0;
   margin-bottom: 10px;
+}
+.titleSpan {
   cursor: pointer;
+  color: #6998AB;
 }

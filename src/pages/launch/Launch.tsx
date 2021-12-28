@@ -4,9 +4,6 @@ import { Card } from "antd";
 import { ILaunchData } from "@/interfaces/interfaces";
 import { useQuery } from "@apollo/client";
 import { GET_LAUNCH_QUERY } from "@/queries/queries";
-import { Link } from "react-router-dom";
-
-
 
 export default function () {
   const id = window.location.pathname.split("/")[2];
@@ -14,14 +11,16 @@ export default function () {
     variables: { id: id }
   });
 
-  if (loading) { return <p>Loading...</p> }
-  if (error) { return <p>ERROR!</p> }
-
-  return (<div>
-    <MissionCard
-      launchData={data.launch}
-    />
-  </div>)
+  if (loading) { return <p className={styles.errorLoad}>Loading...</p> }
+  if (error) { return  <p className={styles.errorLoad}>ERROR!</p> }
+  if (data && data.launch) {
+    return (
+      <div>
+        <MissionCard
+          launchData={data.launch}
+        />
+      </div>);
+  }else { return <p className={styles.errorLoad} >ERROR!</p> }
 }
 
 type launchProps = {
@@ -29,7 +28,7 @@ type launchProps = {
 }
 
 const MissionCard: React.FC<launchProps> = ({ launchData }) => {
-  const { id, mission_name, launch_date_utc, launch_success,
+  const { mission_name, launch_date_utc, launch_success,
     launch_site, rocket: { rocket_name }, links: { flickr_images, article_link, video_link } } = launchData;
   const date = new Date(launch_date_utc);
   const date_time = String(date).split("GMT")[0];
@@ -38,7 +37,7 @@ const MissionCard: React.FC<launchProps> = ({ launchData }) => {
     <Card size='small'
       bordered={true}
       className={styles.missionCard}
-      title={<p style={{ fontSize: "24px" }}> {mission_name}<span style={{ float: 'right', fontSize: "16px" }}> {date_time} </span>
+      title={<p style={{ fontSize: "24px", color: "#1A374D" }}> {mission_name}<span style={{ float: 'right', fontSize: "16px" }}> {date_time} </span>
       </p>}
     >
       <p>Rocket Name : {rocket_name}</p>
@@ -52,13 +51,13 @@ const MissionCard: React.FC<launchProps> = ({ launchData }) => {
         <></>
       }
       {article_link ?
-      <p> More detauls about this mission can be found <a target="_blank" href={article_link}>here</a>. </p>
+        <p> More detauls about this mission can be found <a target="_blank" href={article_link}>here</a>. </p>
         :
-      <></>}
+        <></>}
       {video_link ?
-        <p>The video can be watched <a href={video_link} target="_blank">here.</a></p>
-      :
-      <></>}
+        <p>The video of the launch can be watched <a href={video_link} target="_blank">here.</a></p>
+        :
+        <></>}
 
     </Card>);
 }

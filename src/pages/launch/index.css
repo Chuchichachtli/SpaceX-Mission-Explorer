@@ -7,8 +7,13 @@ p {
   max-width: 70%;
   margin: auto;
   text-align: center;
+  background-color: #B1D0E0;
 }
 img {
   max-height: 300px;
   margin-bottom: 20px;
+}
+
+.errorLoad {
+  margin: auto;
 }

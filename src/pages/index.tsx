@@ -71,7 +71,9 @@ export default function () {
 
   const renderResults = () => {
     return (showResults() ?
-      (<Card size="small" title={<span className={styles.header}>Results</span>} >
+      (<Card size="small"
+        className={styles.resulBackground}
+        title={<span className={styles.header}>Results</span>} >
         <Row>
           {results.launchesPast.map((launchData: IMission) => {
             return <LaunchCard launchData={launchData} />
@@ -111,7 +113,8 @@ const LaunchCard: React.FC<LaunchCardProps> = ({ launchData }) => {
       <Card size='small'
         bordered={true}
         className={styles.resultCard}
-        title={<Link to={"/launch/"+id} className={styles.resultCardTitle}> {mission_name} </Link>}
+        title={<Link to={"/launch/"+id}
+        className={styles.resultCardTitle}> {mission_name} </Link>}
       >
         <p> {date.toString()} </p>
         <p> {launch_success ? <span style={{ color: "green", fontWeight:"600" }}>Successful</span>
