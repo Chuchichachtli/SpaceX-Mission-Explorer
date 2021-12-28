@@ -56,7 +56,7 @@ const MissionCard: React.FC<launchProps> = ({ launchData }) => {
         :
         <></>}
       {wikipedia ?
-        <p><a href={wikipedia}>Wikipedia Article</a></p>
+        <p><a href={wikipedia} target="_blank">Wikipedia Article</a></p>
         :
         <></>
       }
