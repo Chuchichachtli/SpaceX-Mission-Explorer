@@ -21,6 +21,7 @@
 .resultCard p {
     margin : 2px;
     color: white;
+    font-size: small;
 }
 .resultCardButton {
   float: right;
@@ -34,3 +35,8 @@
 .floatRight {
   float: right;
 }
+.resultCardTitle {
+  color :blue;
+  cursor: pointer;
+}
+

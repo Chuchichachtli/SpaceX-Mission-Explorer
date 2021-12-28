@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
 import styles from './index.css';
 import { Input, Card, Row, Col, Button } from 'antd';
-const { Search } = Input;
-import {
-  useQuery,
-  gql
-} from "@apollo/client";
+import { IMission } from "@/interfaces/interfaces";
+import { useQuery } from "@apollo/client";
 import { Link } from 'react-router-dom';
+import { GET_MISSIONS_QUERY } from '@/queries/queries';
+const { Search } = Input;
 
-const GET_MISSIONS = gql`
-  query GetMissions ($limit : Int, $mission_name : String) {
-    launchesPast(limit: $limit, find: { mission_name: $mission_name } ) {
-      mission_name
-      launch_site {
-        site_name_long
-      }
-      launch_date_utc
-      launch_success
-      id
-    }
-  }
-  `;
 export default function () {
 
 
@@ -32,7 +18,7 @@ export default function () {
 
   const showResults = () => { return results.launchesPast.length !== 0; }
 
-  const { loading, error, data, refetch } = useQuery(GET_MISSIONS, {
+  const { loading, error, data, refetch } = useQuery(GET_MISSIONS_QUERY, {
     variables: { limit: resultCount, mission_name: missionName },
     skip: skipRefetch,
     onCompleted: setResults
@@ -113,16 +99,6 @@ export default function () {
   )
 }
 
-interface IMission {
-  id: string;
-  mission_name: string;
-  launch_date_utc: string;
-  launch_success: boolean;
-  launch_site: ILaunchSite;
-}
-interface ILaunchSite {
-  site_name_long: string;
-}
 type LaunchCardProps = {
   launchData: IMission
 }
@@ -132,9 +108,15 @@ const LaunchCard: React.FC<LaunchCardProps> = ({ launchData }) => {
   date.toString()
   return (
     <Col span={12} style={{ width: 300 }}>
-      <Card size='small' bordered={true} className={styles.resultCard} title={mission_name}>
+      <Card size='small'
+        bordered={true}
+        className={styles.resultCard}
+        title={<Link to={"/launch/"+id} className={styles.resultCardTitle}> {mission_name} </Link>}
+      >
         <p> {date.toString()} </p>
-        <p> {launch_success ? <span style={{ color: "green" }}>Successful</span> : <span style={{ color: "red" }}>Failed</span>} </p>
+        <p> {launch_success ? <span style={{ color: "green", fontWeight:"600" }}>Successful</span>
+        :
+        <span style={{ color: "red", fontWeight:"600" }}>Failed</span>} </p>
         <p> {launch_site.site_name_long} </p>
         <Link to={"/launch/"+id}><Button className={styles.floatRight}>More</Button></Link>
       </Card>
