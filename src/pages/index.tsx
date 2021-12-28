@@ -88,11 +88,11 @@ export default function () {
 
   return (
     <div style={{ width: "100%" }} className={styles.normal}>
-      <Row gutter={8} align='top'>
+      <Row gutter={4} align='top'>
         <Col span={6}>
           {renderSearch()}
         </Col>
-        <Col span={16} >
+        <Col span={18} >
           {renderResults()}
         </Col>
 

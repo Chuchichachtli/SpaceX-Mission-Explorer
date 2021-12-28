@@ -2,6 +2,8 @@ html, body, #root {
   height: 100%;
   background-color: #406882;
   font-family: sans-serif;
+  overflow-x: hidden;
+  padding-bottom: 5px;
 }
 
 body {
