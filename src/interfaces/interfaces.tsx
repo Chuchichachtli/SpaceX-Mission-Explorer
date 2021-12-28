@@ -24,6 +24,7 @@ interface ILinks {
   flickr_images : string[]
   article_link : string
   video_link : string
+  wikipedia: string
 }
 interface IRocket {
   rocket_name : string

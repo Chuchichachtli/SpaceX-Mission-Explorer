@@ -13,6 +13,7 @@ export default function () {
 
   if (loading) { return <p className={styles.errorLoad}>Loading...</p> }
   if (error) { return  <p className={styles.errorLoad}>ERROR!</p> }
+  console.log(data)
   if (data && data.launch) {
     return (
       <div>
@@ -29,7 +30,7 @@ type launchProps = {
 
 const MissionCard: React.FC<launchProps> = ({ launchData }) => {
   const { mission_name, launch_date_utc, launch_success,
-    launch_site, rocket: { rocket_name }, links: { flickr_images, article_link, video_link } } = launchData;
+    launch_site, rocket: { rocket_name }, links: { flickr_images, article_link, video_link, wikipedia } } = launchData;
   const date = new Date(launch_date_utc);
   const date_time = String(date).split("GMT")[0];
   console.log(article_link)
@@ -51,13 +52,19 @@ const MissionCard: React.FC<launchProps> = ({ launchData }) => {
         <></>
       }
       {article_link ?
-        <p> More detauls about this mission can be found <a target="_blank" href={article_link}>here</a>. </p>
+        <p> More detauls about this mission can be found <a target="_blank" href={article_link}>here</a>.</p>
         :
         <></>}
+      {wikipedia ?
+        <p><a href={wikipedia}>Wikipedia Article</a></p>
+        :
+        <></>
+      }
       {video_link ?
-        <p>The video of the launch can be watched <a href={video_link} target="_blank">here.</a></p>
+        <p>The video of the launch can be watched <a href={video_link} target="_blank">here</a>.</p>
         :
-        <></>}
+        <></>
+      }
 
     </Card>);
 }

@@ -18,16 +18,17 @@ export const GET_LAUNCH_QUERY = gql`
 query GetLaunch ($id : ID!)
 {
   launch(id: $id) {
-    id
     launch_date_utc
     launch_site {
       site_name_long
     }
+
     launch_success
     links {
       flickr_images
       article_link
       video_link
+      wikipedia
     }
     mission_name
     rocket {
